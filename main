@@ -1,0 +1,186 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <stdbool.h>
+
+struct Alunos{ //ESTRUTURA BASE
+
+    char nome[50];
+    char nomeR[50];
+    char RG[20];
+    char tel[20];
+    char ano[20];
+    int RA;
+
+};
+//Protótipos das funções
+void incluir();
+void pegarDados(struct Alunos *contato);
+void guardarDados(FILE *x ,struct Alunos contato);
+void listar();
+void imprimirContato    ( struct Alunos x );
+int lerDadosArquivo (FILE *x, struct Alunos *y);
+int  menu( int opc );
+void alterar();
+
+int main (){ //Função Principal
+    //ajusta o console a 70 letras e 50 linhas
+    system("MODE CON cols=70 lines=50");
+
+    //Permite letras como ç, ã, á etc
+    setlocale(LC_ALL, "Portuguese");
+
+    bool sair = false;
+    int opc = 0;
+    while( !sair ){
+           switch ( menu(opc) ) {
+           case 1: incluir();   break;
+		   case 2: listar ();   break;
+		  // case 3: ordenar();   break;
+           //case 4: excluir();   break;
+           case 5: alterar(); break;
+		    case 0: sair = true; break;
+		    default: printf( "Não existe essa opcao\n" ); getchar(); getchar(); break;
+		}// SWITCH
+
+    }// WHILE
+
+    return 0;
+}
+void incluir(){ //Função para cadastrar um novo membro ao final do arquivo
+
+FILE *fp;
+if ((fp = fopen("agenda.txt","a"))== NULL){
+    printf("\nNão foi possivel abrir o arquivo agenda.txt.\n");
+    return;
+    }
+
+    struct Alunos contato;
+    pegarDados(&contato);
+    guardarDados(fp,contato);
+    printf("Contato guardado corretamente. ");
+    getchar();
+    getchar(); // Pausa
+    fclose(fp);
+    return;
+
+
+}
+void pegarDados(struct Alunos *contato){ //Salvar dados na estrutura
+char opc[10];
+
+system("cls");
+do{
+            system("cls");
+        printf("Digite os dados pedidos \n");
+        printf("\nNome...............: ");
+            scanf(" %s", contato->nome);
+        setbuf(stdin,NULL); // LIMPAR BUFFER
+        printf("\nNome do Responsavel: ");
+            scanf(" %s",contato->nomeR);
+        setbuf(stdin,NULL);
+        printf("\nRG ................: ");
+            scanf(" %s", contato->RG);
+        setbuf(stdin,NULL);
+        printf("\nTelefone...........: ");
+            scanf(" %s",contato->tel);
+        setbuf(stdin,NULL);
+        printf("\nAno................: ");
+            scanf(" %s",contato->ano);
+        setbuf(stdin,NULL);
+        printf("\nRA.................: ");
+            scanf(" %d",&contato->RA);
+        setbuf(stdin,NULL);
+        puts("\n\nCONFIRMA OS DADOS ? (y/n)");
+            scanf(" %s", opc);
+}while(opc[0] == 'n'|| opc[0] == 'N');
+
+return;
+
+}
+void guardarDados(FILE *x ,struct Alunos contato){ // Salvar dados ao final do arquivo
+//Escreve os dados tomados pela função pegarDados no arquivo *x
+fseek(x, 0L, SEEK_END); //Colocar ponteiro no final do arquivo para não sobreescrever o cadastro anterior
+fwrite(&contato,sizeof(struct Alunos),1,x);
+return;
+
+}
+void listar(){ // Listar dados gravados
+//Função que imprime tdos os contatos cadastrados do arquivo referente
+    system("cls");
+    FILE *fp;
+    fp = fopen("agenda.txt", "r");
+    if(fp == NULL){
+        printf("Não foi possivel abrir o arquivo");
+        return;
+        }
+    struct Alunos contato;
+    rewind(fp); // Volta o ponteiro ao começo do arquivo
+    //ler um a um enquando não chegar ao fim do arquivo
+    while(lerDadosArquivo(fp,&contato))//fread retorna o numero de arquivos lidos como mandou ler só 1, se nao conseguir retornará 0(FALSE
+    {
+    //Evitar lista de contatos excluidos
+        if(contato.nome[0] != '*'){
+            imprimirContato(contato);
+
+                    }
+        }
+        getchar(); // PAUSAR A TELA
+        fclose(fp);
+    return;
+}
+void imprimirContato    ( struct Alunos x ){ // Função chamada pela função listar, para mostrar na tela dados
+    //imprime o contato recebido por referencia.
+    printf("Nome:%s                   RA:%d\n", x.nome,x.RA);
+        return;
+    }
+int lerDadosArquivo (FILE *x, struct Alunos *y){ // fread no arquivo
+    return fread(y,sizeof(struct Alunos),1,x);
+}
+int  menu( int opc ){ // opção do menu switch main
+  //Esse é o menu de opçoes
+    system("cls");
+    printf("Escolha uma opçao \n1-Incluir \n2-Listar \n3-Ordenar \n4-Excluir \n5-Alterar \n0-Sair \n?>>");
+    scanf(" %d%*c",&opc );
+    return opc; //<-retorna a opçao para o switch
+}
+void alterar (){ // Altera um cadastro
+
+FILE *fp;
+if((fp= fopen("agenda.txt","r+"))== NULL){
+    printf("Erro na abertura do arquivo agenda.txt");
+    return;
+}
+
+struct Alunos contact;
+long int nReg;
+
+puts("Informe o numero do cadastro: "); scanf("%ld",&nReg);
+if  (fseek(fp,(nReg-1)*sizeof(struct Alunos),SEEK_SET) != 0){ // nReg -1 porque o usuario não conhece o indice '0'
+    printf("Erro ao posicionar no arquivo!\n");
+    return;
+    }
+if  (lerDadosArquivo(fp,&contact) != 1) //fread vai ler 1 estrutura na qual foi posicionada pelo fseek
+{
+    puts("Erro na leitura do arquivo");
+    return;
+}
+
+if   (contact.nome[0] == '*')
+{
+    printf("Um registro apagado não pode ser alterado !\n");
+    return;
+}
+
+printf("Dados a serem alterados : \n");
+    imprimirContato(contact);
+printf("Novos dados :\n");
+    pegarDados(&contact);
+// RECUAR UM REGISTRO NO ARQUIVO
+fseek(fp,-(long) sizeof(struct Alunos),SEEK_CUR);
+//REESCREVER REGISTRO
+
+fwrite(&contact,sizeof(struct Alunos),1,fp);
+    puts("Dados gravados!\n");
+fclose(fp);
+}
