@@ -71,25 +71,25 @@ char opc[10];
 
 system("cls");
 do{
-            system("cls");
+             system("cls");
         printf("Digite os dados pedidos \n");
         printf("\nNome...............: ");
-            scanf(" %s", contato->nome);
+           scanf("%[a-z A-Z]s", contato->nome);
         setbuf(stdin,NULL); // LIMPAR BUFFER
         printf("\nNome do Responsavel: ");
-            scanf(" %s",contato->nomeR);
+           scanf("%[a-z A-Z]s",contato->nomeR);
         setbuf(stdin,NULL);
         printf("\nRG ................: ");
-            scanf(" %s", contato->RG);
+        scanf("%[a-z A-Z]s", contato->RG);
         setbuf(stdin,NULL);
         printf("\nTelefone...........: ");
-            scanf(" %s",contato->tel);
+        scanf("%[a-z A-Z]s",contato->tel);
         setbuf(stdin,NULL);
         printf("\nAno................: ");
-            scanf(" %s",contato->ano);
+        scanf("%[a-z A-Z]s",contato->ano);
         setbuf(stdin,NULL);
         printf("\nRA.................: ");
-            scanf(" %d",&contato->RA);
+         scanf("%[a-z A-Z]s",&contato->RA);
         setbuf(stdin,NULL);
         puts("\n\nCONFIRMA OS DADOS ? (y/n)");
             scanf(" %s", opc);
