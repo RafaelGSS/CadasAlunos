@@ -22,6 +22,7 @@ void imprimirContato    ( struct Alunos x );
 int lerDadosArquivo (FILE *x, struct Alunos *y);
 int  menu( int opc );
 void alterar();
+void excluir();
 
 int main (){ //Função Principal
     //ajusta o console a 70 letras e 50 linhas
@@ -122,7 +123,6 @@ void listar(){ // Listar dados gravados
     //Evitar lista de contatos excluidos
         if(contato.nome[0] != '*'){
             imprimirContato(contato);
-
                     }
         }
         getchar(); // PAUSAR A TELA
@@ -183,4 +183,33 @@ fseek(fp,-(long) sizeof(struct Alunos),SEEK_CUR);
 fwrite(&contact,sizeof(struct Alunos),1,fp);
     puts("Dados gravados!\n");
 fclose(fp);
+}
+void excluir(){
+	int num1,i;
+	FILE* fp;
+	struct Alunos x;
+	if((fp=fopen ("agenda.txt","r+"))== NULL){
+		puts("Erro ao abrir arquivo.\n");
+		return;
+	}
+	printf("Digite o numero de cadastro a ser excluido");
+	scanf("%d",&num1);
+	fseek(fp,(num1-1)*sizeof(struct Alunos),SEEK_SET); // COLOCAR PONTEIRO NA ESTRUTURA DESEJADA
+if  (lerDadosArquivo(fp,&x) != 1) //fread vai ler 1 estrutura na qual foi posicionada pelo fseek
+{
+    puts("Erro na leitura do arquivo");
+    return;
+}
+	for (i=0;i<20;i++){
+		x.nome[i] = '*';
+		x.nomeR[i] = '*';
+		x.ano[i] = '*';
+		x.RG[i] = '*';
+		x.tel[i]= '*';
+		
+	}
+	fseek(fp,-(long) sizeof(struct Alunos),SEEK_CUR); // recuar uma estrutura para sobrepola
+	fwrite(&x,sizeof(struct Alunos),1,fp);
+	    puts("Dados excluidos!\n");
+	fclose(fp);
 }
