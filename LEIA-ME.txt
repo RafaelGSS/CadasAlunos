@@ -1,0 +1,12 @@
+Oque falta :
+Transformar usuarios.txt em modo binário
+Password escondido com getpass ||
+função ordenar
+menu para adm
+usar malloc
+pesquisa retornando cadastro completo
+
+Erros :
+lucas       èý"   M 1234 ŒmvûÏþÿÿÿÛ¦ 
+alocar memória especifica no arquivo para os nomes e cadastros;
+
