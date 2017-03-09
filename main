@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h> /* GETPASS */
-#define COMPUTADOR 2  /* COMPUTADOR 1 = WINDOWS , COMPUTADOR 2 = UNIX */
+#define COMPUTADOR 1  /* COMPUTADOR 1 = WINDOWS , COMPUTADOR 2 = UNIX */
 #if COMPUTADOR == 1
     #include "stdio.h"
 #elif COMPUTADOR == 2
@@ -95,19 +95,19 @@ do{
         system("cls");
         printf("Digite os dados pedidos \n");
         printf("\nNome...............: ");
-            scanf(" %[a-z A-Z]s", contato->nome);
+            scanf("%[^\n]s", contato->nome);
         setbuf(stdin,NULL); // LIMPAR BUFFER
         printf("\nNome do Responsavel: ");
-            scanf("%[a-z A-Z]s",contato->nomeR);
+            scanf("%[^\n]s",contato->nomeR);
         setbuf(stdin,NULL);
         printf("\nRG ................: ");
-            scanf("%[0-9]s", contato->RG);
+            scanf("%[^\n]s", contato->RG);
         setbuf(stdin,NULL);
         printf("\nTelefone...........: ");
-            scanf("%[0-9]s",contato->tel);
+            scanf("%[^\n]s",contato->tel);
         setbuf(stdin,NULL);
         printf("\nAno................: ");
-            scanf("%s",contato->ano);
+            scanf("%[^\n]s",contato->ano);
         setbuf(stdin,NULL);
         printf("\nRA.................: ");
             scanf(" %d",&contato->RA);
@@ -155,7 +155,7 @@ void listar(){ // Listar dados gravados
 void imprimirContato    ( struct Alunos x, int num ){ // Função chamada pela função listar, para mostrar na tela dados
     //imprime o contato recebido por referencia.
     printf("%d : Nome:%-20s\t\t\t\tRA:%5d\n",num, x.nome,x.RA);
-        return;
+    return;
     }
 int lerDadosArquivo (FILE *x, struct Alunos *y){ // fread no arquivo
     return fread(y,sizeof(struct Alunos),1,x);
@@ -179,7 +179,7 @@ struct Alunos contact;
 long int nReg;
 
 
-puts("Informe o numero do cadastro: "); scanf("%ld",&nReg);
+puts("Informe o numero do cadastro: "); scanf(" %ld",&nReg);
     system("cls");
 if  (fseek(fp,(nReg-1)*sizeof(struct Alunos),SEEK_SET) != 0){ // nReg -1 porque o usuario não conhece o indice '0'
     printf("Erro ao posicionar no arquivo!\n");
@@ -201,6 +201,8 @@ if   (contact.nome[0] == '*')
 
 printf("Dados a serem alterados : \n");
     imprimirContato(contact,nReg);
+    getchar(); // LIMPAR BUFFER
+    getchar();
 printf("Novos dados :\n");
     pegarDados(&contact);
 // RECUAR UM REGISTRO NO ARQUIVO
