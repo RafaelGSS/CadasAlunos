@@ -1,10 +1,12 @@
 Oque falta :
-Transformar usuarios.txt em modo binário
-Password escondido com getpass ||
-função ordenar
-menu para adm
-usar malloc
-pesquisa retornando cadastro completo
+  Transformar usuarios.txt em modo binário;
+  Password escondido com getpass ||;
+  função ordenar();
+  menu para administrador ;
+  usar malloc para estruturas;
+  função pesquisa() retornando cadastro completo;
+  função excluir() alterar ela para colocar apenas um '*' para não ocupar muita memóra no arquivo;
+  
 
 Erros :
 lucas       èý"   M 1234 ŒmvûÏþÿÿÿÛ¦ 
