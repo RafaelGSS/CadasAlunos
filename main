@@ -2,6 +2,15 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <stdbool.h>
+#include <string.h>
+#include <unistd.h> /* GETPASS */
+#define COMPUTADOR 2  /* COMPUTADOR 1 = WINDOWS , COMPUTADOR 2 = UNIX */
+#if COMPUTADOR == 1
+    #include "stdio.h"
+#elif COMPUTADOR == 2
+    #define system(x) system("clear") /*  Caso esteja rodando em UNIX */
+#endif // COMPUTADOR
+
 
 struct Alunos{ //ESTRUTURA BASE
 
@@ -13,6 +22,10 @@ struct Alunos{ //ESTRUTURA BASE
     int RA;
 
 };
+struct Admin{//ESTRUTURA LOGIN
+    char nome[20];
+    char senha[20];
+};
 //Protótipos das funções
 void incluir();
 void pegarDados(struct Alunos *contato);
@@ -23,6 +36,8 @@ int lerDadosArquivo (FILE *x, struct Alunos *y);
 int  menu( int opc );
 void alterar();
 void excluir();
+void verific();
+void newusuario();
 
 int main (){ //Função Principal
     //ajusta o console a 70 letras e 50 linhas
@@ -31,8 +46,12 @@ int main (){ //Função Principal
     //Permite letras como ç, ã, á etc
     setlocale(LC_ALL, "Portuguese");
 
+
     bool sair = false;
     int opc = 0;
+
+
+    verific();
     while( !sair ){
            switch ( menu(opc) ) {
            case 1: incluir();   break;
@@ -40,6 +59,7 @@ int main (){ //Função Principal
 		  // case 3: ordenar();   break;
            case 4: excluir();   break;
            case 5: alterar(); break;
+           case 6: newusuario(); break;
 		    case 0: sair = true; break;
 		    default: printf( "Não existe essa opcao\n" ); getchar(); getchar(); break;
 		}// SWITCH
@@ -72,22 +92,22 @@ char opc[10];
 
 system("cls");
 do{
-            system("cls");
+        system("cls");
         printf("Digite os dados pedidos \n");
         printf("\nNome...............: ");
-            scanf(" %s", contato->nome);
+            scanf(" %[a-z A-Z]s", contato->nome);
         setbuf(stdin,NULL); // LIMPAR BUFFER
         printf("\nNome do Responsavel: ");
-            scanf(" %s",contato->nomeR);
+            scanf("%[a-z A-Z]s",contato->nomeR);
         setbuf(stdin,NULL);
         printf("\nRG ................: ");
-            scanf(" %s", contato->RG);
+            scanf("%[0-9]s", contato->RG);
         setbuf(stdin,NULL);
         printf("\nTelefone...........: ");
-            scanf(" %s",contato->tel);
+            scanf("%[0-9]s",contato->tel);
         setbuf(stdin,NULL);
         printf("\nAno................: ");
-            scanf(" %s",contato->ano);
+            scanf("%s",contato->ano);
         setbuf(stdin,NULL);
         printf("\nRA.................: ");
             scanf(" %d",&contato->RA);
@@ -143,7 +163,7 @@ int lerDadosArquivo (FILE *x, struct Alunos *y){ // fread no arquivo
 int  menu( int opc ){ // opção do menu switch main
   //Esse é o menu de opçoes
     system("cls");
-    printf("Escolha uma opçao \n1-Incluir \n2-Listar \n3-Ordenar \n4-Excluir \n5-Alterar \n0-Sair \n?>>");
+    printf("\t\t\t\tEscolha uma opção\n1-Incluir \n2-Listar \n3-Ordenar \n4-Excluir \n5-Alterar \n0-Sair \n?>>");
     scanf(" %d%*c",&opc );
     return opc; //<-retorna a opçao para o switch
 }
@@ -160,6 +180,7 @@ long int nReg;
 
 
 puts("Informe o numero do cadastro: "); scanf("%ld",&nReg);
+    system("cls");
 if  (fseek(fp,(nReg-1)*sizeof(struct Alunos),SEEK_SET) != 0){ // nReg -1 porque o usuario não conhece o indice '0'
     printf("Erro ao posicionar no arquivo!\n");
     return;
@@ -188,6 +209,7 @@ fseek(fp,-(long) sizeof(struct Alunos),SEEK_CUR);
 
 fwrite(&contact,sizeof(struct Alunos),1,fp);
     puts("Dados gravados!\n");
+    getchar();
 fclose(fp);
 }
 void excluir(){
@@ -198,7 +220,7 @@ void excluir(){
 		puts("Erro ao abrir arquivo.\n");
 		return;
 	}
-	printf("Digite o numero de cadastro a ser excluido");
+	printf("Digite o numero de cadastro a ser excluido >> ");
 	scanf("%d",&num1);
 	fseek(fp,(num1-1)*sizeof(struct Alunos),SEEK_SET); // COLOCAR PONTEIRO NA ESTRUTURA DESEJADA
 if  (lerDadosArquivo(fp,&x) != 1) //fread vai ler 1 estrutura na qual foi posicionada pelo fseek
@@ -212,10 +234,101 @@ if  (lerDadosArquivo(fp,&x) != 1) //fread vai ler 1 estrutura na qual foi posici
 		x.ano[i] = '*';
 		x.RG[i] = '*';
 		x.tel[i]= '*';
-
 	}
+    x.RA = 0; //Fora do FOR pois RA não é um vetor.
+
 	fseek(fp,-(long) sizeof(struct Alunos),SEEK_CUR); // recuar uma estrutura para sobrepola
 	fwrite(&x,sizeof(struct Alunos),1,fp);
 	    puts("Dados excluidos!\n");
+	    getchar();
+	    getchar();
 	fclose(fp);
+}
+void verific(){
+    FILE *arq;
+    arq = fopen("usuarios.txt","r");
+    if(arq == NULL){
+            newusuario();
+        arq = fopen("usuarios.txt","r");
+
+        }
+    else
+        printf("Arquivo lido com sucesso!\n");
+
+    struct Admin login;
+    char senha[12];
+    char usuario[12];
+    int teste = 0;
+
+    system("cls");
+    printf("Para prosseguir digite os dados\nUsuario>> ");
+        scanf("%s",usuario);
+    printf("\nSenha>> "); scanf(" %s",senha);
+     if((strlen(senha))< 4 ){
+        printf("Numero de digitos INCORRETO!\n");
+        exit(1);
+    }
+    while((fread(&login,sizeof(struct Admin),1,arq))== 1)
+{
+
+        while((strcmp(usuario,login.nome))== 0){
+            if((strcmp(senha,login.senha))== 0){
+                teste = 1;
+                getchar();
+                break;
+                }
+                break;
+                                                }
+}
+    if(teste != 0){
+    system("cls");
+    if((strcmp(usuario,"admin"))== 0)
+        printf("OLÁ RAFAEL\nSEGUE O MENU DE ADMINISTRADOR>>\n");
+    else
+    printf("Olá Senhor(a) %s !\n%s\n%s\nDigite <ENTER> Para Prosseguir...",usuario,__DATE__,__TIME__);
+    getchar();
+}
+    else {
+        puts("Dados Incorretos!\n*********** Permissão Negada   ***********");
+        exit(3);
+        }
+}
+
+void newusuario(){
+    FILE *arq;
+    arq = fopen("usuarios.txt","a+");
+    if(arq == NULL){
+        printf("ERRO AO CRIAR ARQUIVO. CONTACTE O ADMINISTRADOR\n");
+        exit(1);
+    }
+    struct Admin cadastro = {0};
+    char passConf[20];
+    int ver = 0;
+        do{
+            ver = 0;
+            printf("\nDigite seu nome de usuário>> ");
+            scanf("%s",cadastro.nome);
+            printf("\nDigite sua senha>> "); scanf("%s",cadastro.senha);
+            printf("\nConfirme sua senha>> "); scanf("%s",passConf);
+            if((strcmp(cadastro.senha,passConf))== 0){
+                printf("Senhas conferidas!\n");
+            }
+            else{
+                puts("Senhas não são iguais!\n");
+                ver = 1;
+                getchar();
+                system("cls");
+                }
+            if((strlen(cadastro.senha))< 4){
+                ver = 1;
+                puts("Digitos insuficientes! \n");
+                getchar();
+                system("cls");
+            }
+            }while(ver == 1);
+        fwrite (&cadastro,sizeof(struct Admin),1,arq);
+        puts("\nLOGIN SALVO");
+        getchar();
+        fclose(arq);
+
 }
