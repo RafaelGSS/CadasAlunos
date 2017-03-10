@@ -1,8 +1,12 @@
+                          PEÇO A TODOS QUE VIEREM ALTERAR O LEIA-ME QUE COLOQUEM SEU NOME OU NICKNAME PÓS LINHA ALTERADA.
+                          AQUI EU PEÇO DICAS DE COMO FAZER, NÃO PEÇO QUE ALTEREM MEU CÓDIGO, PRECISO ENTENDER E EU MESMO FAZER
+                                                            OBG A TODOS!
+    
 Oque falta :
-  Transformar usuarios.txt em modo binário;
-  Password escondido com getpass ||;
-  função ordenar();
-  menu para administrador ;
+  Transformar arquivos em modo binário;
+  Password escondido na tela de login.
+  função ordenar()
+  menu para administrador
   usar malloc para estruturas;
   função pesquisa() retornando cadastro completo;
   função excluir() alterar ela para colocar apenas um '*' para não ocupar muita memóra no arquivo;
