@@ -1,18 +1,10 @@
-                          PEÇO A TODOS QUE VIEREM ALTERAR O LEIA-ME QUE COLOQUEM SEU NOME OU NICKNAME PÓS LINHA ALTERADA.
-                          AQUI EU PEÇO DICAS DE COMO FAZER, NÃO PEÇO QUE ALTEREM MEU CÓDIGO, PRECISO ENTENDER E EU MESMO FAZER
-                                                            OBG A TODOS!
-    
-Oque falta :
-  Transformar arquivos em modo binário;
-  Password escondido na tela de login.
-  função ordenar()
-  menu para administrador
-  usar malloc para estruturas;
-  função pesquisa() retornando cadastro completo;
-  função excluir() alterar ela para colocar apenas um '*' para não ocupar muita memóra no arquivo;
-  
+************************
+*    Date of code      *
+* Start: 02-01-2017    *
+* Finish: Not Finished *
+************************
+My first project in C.
+But it was not finished because I'm studying C ++ and database to implement in my future code.
+At first, the code was for my uncle, he owns a kindergarten, and does not have a software for registration.
 
-Erros :
-lucas       èý"   M 1234 ŒmvûÏþÿÿÿÛ¦ 
-alocar memória especifica no arquivo para os nomes e cadastros;
-
+In future i will finish the code.
