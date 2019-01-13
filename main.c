@@ -1,3 +1,24 @@
+/*
+
+
+
+
+
+
+
+
+
+Eu sabia que voc√™ iria ler esse c√≥digo!
+
+
+
+
+
+
+
+
+
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
@@ -26,7 +47,7 @@ struct Admin{//ESTRUTURA LOGIN
     char nome[20];
     char senha[20];
 };
-//ProtÛtipos das funÁıes
+//Prot√≥tipos das fun√ß√µes
 void incluir();
 void pegarDados(struct Alunos *contato);
 void guardarDados(FILE *x ,struct Alunos contato);
@@ -39,11 +60,11 @@ void excluir();
 void verific();
 void newusuario();
 
-int main (){ //FunÁ„o Principal
+int main (){ //Fun√ß√£o Principal
     //ajusta o console a 70 letras e 50 linhas
     system("MODE CON cols=70 lines=50");
 
-    //Permite letras como Á, „, · etc
+    //Permite letras como √ß, √£, √° etc
     setlocale(LC_ALL, "Portuguese");
 
 
@@ -61,18 +82,18 @@ int main (){ //FunÁ„o Principal
            case 5: alterar(); break;
            case 6: newusuario(); break;
 		    case 0: sair = true; break;
-		    default: printf( "N„o existe essa opcao\n" ); getchar(); getchar(); break;
+		    default: printf( "N√£o existe essa opcao\n" ); getchar(); getchar(); break;
 		}// SWITCH
 
     }// WHILE
 
     return 0;
 }
-void incluir(){ //FunÁ„o para cadastrar um novo membro ao final do arquivo
+void incluir(){ //Fun√ß√£o para cadastrar um novo membro ao final do arquivo
 
 FILE *fp;
 if ((fp = fopen("agenda.dat","ab"))== NULL){
-    printf("\nN„o foi possivel abrir o arquivo agenda.txt.\n");
+    printf("\nN√£o foi possivel abrir o arquivo agenda.txt.\n");
     return;
     }
 
@@ -141,8 +162,8 @@ return;
 
 }
 void guardarDados(FILE *x ,struct Alunos contato){ // Salvar dados ao final do arquivo
-//Escreve os dados tomados pela funÁ„o pegarDados no arquivo *x
-fseek(x, 0L, SEEK_END); //Colocar ponteiro no final do arquivo para n„o sobreescrever o cadastro anterior
+//Escreve os dados tomados pela fun√ß√£o pegarDados no arquivo *x
+fseek(x, 0L, SEEK_END); //Colocar ponteiro no final do arquivo para n√£o sobreescrever o cadastro anterior
 fprintf(x,"%s,",contato.nome);
 fprintf(x,"%s,",contato.nomeR);
 fwrite(&contato.RA,sizeof(int),1,x);
@@ -150,19 +171,19 @@ return;
 
 }
 void listar(){ // Listar dados gravados
-//FunÁ„o que imprime tdos os contatos cadastrados do arquivo referente
+//Fun√ß√£o que imprime tdos os contatos cadastrados do arquivo referente
     system("cls");
     int contador = 1;
     FILE *fp;
     fp = fopen("agenda.dat", "rb");
     if(fp == NULL){
-        printf("N„o foi possivel abrir o arquivo");
+        printf("N√£o foi possivel abrir o arquivo");
         return;
         }
     struct Alunos contato;
-    rewind(fp); // Volta o ponteiro ao comeÁo do arquivo
-    //ler um a um enquando n„o chegar ao fim do arquivo
-    while(lerDadosArquivo(fp,&contato))//fread retorna o numero de arquivos lidos como mandou ler sÛ 1, se nao conseguir retornar· 0(FALSE
+    rewind(fp); // Volta o ponteiro ao come√ßo do arquivo
+    //ler um a um enquando n√£o chegar ao fim do arquivo
+    while(lerDadosArquivo(fp,&contato))//fread retorna o numero de arquivos lidos como mandou ler s√≥ 1, se nao conseguir retornar√° 0(FALSE
     {
     //Evitar lista de contatos excluidos
         if(contato.nome[0] != '*'){
@@ -175,7 +196,7 @@ void listar(){ // Listar dados gravados
         fclose(fp);
     return;
 }
-void imprimirContato    ( struct Alunos x, int num ){ // FunÁ„o chamada pela funÁ„o listar, para mostrar na tela dados
+void imprimirContato    ( struct Alunos x, int num ){ // Fun√ß√£o chamada pela fun√ß√£o listar, para mostrar na tela dados
     //imprime o contato recebido por referencia.
     printf("%d : Nome:%-20s\t\t\t\tRA:%5d\n",num, x.nome,x.RA);
     return;
@@ -188,12 +209,12 @@ int lerDadosArquivo (FILE *x, struct Alunos *y){
     fread(&y->RA,sizeof(int),1,x);
     return;
 }
-int  menu( int opc ){ // opÁ„o do menu switch main
-  //Esse È o menu de opÁoes
+int  menu( int opc ){ // op√ß√£o do menu switch main
+  //Esse √© o menu de op√ßoes
     system("cls");
-    printf("\t\t\t\tEscolha uma opÁ„o\n1-Incluir \n2-Listar \n3-Ordenar \n4-Excluir \n5-Alterar \n0-Sair \n?>>");
+    printf("\t\t\t\tEscolha uma op√ß√£o\n1-Incluir \n2-Listar \n3-Ordenar \n4-Excluir \n5-Alterar \n0-Sair \n?>>");
     scanf(" %d%*c",&opc );
-    return opc; //<-retorna a opÁao para o switch
+    return opc; //<-retorna a op√ßao para o switch
 }
 void alterar (){ // Altera um cadastro
 
@@ -209,7 +230,7 @@ long int nReg;
 
 puts("Informe o numero do cadastro: "); scanf(" %ld",&nReg);
     system("cls");
-if  (fseek(fp,(nReg-1)*sizeof(struct Alunos),SEEK_SET) != 0){ // nReg -1 porque o usuario n„o conhece o indice '0'
+if  (fseek(fp,(nReg-1)*sizeof(struct Alunos),SEEK_SET) != 0){ // nReg -1 porque o usuario n√£o conhece o indice '0'
     printf("Erro ao posicionar no arquivo!\n");
     return;
     }
@@ -221,7 +242,7 @@ if  (lerDadosArquivo(fp,&contact) != 1) //fread vai ler 1 estrutura na qual foi 
 
 if   (contact.nome[0] == '*')
 {
-    printf("Um registro apagado n„o pode ser alterado !\n");
+    printf("Um registro apagado n√£o pode ser alterado !\n");
     getchar();
     getchar();
     return;
@@ -265,7 +286,7 @@ if  (lerDadosArquivo(fp,&x) != 1) //fread vai ler 1 estrutura na qual foi posici
 		x.RG[i] = '*';
 		x.tel[i]= '*';
 	}
-    x.RA = 0; //Fora do FOR pois RA n„o È um vetor.
+    x.RA = 0; //Fora do FOR pois RA n√£o √© um vetor.
 
 	fseek(fp,-(long) sizeof(struct Alunos),SEEK_CUR); // recuar uma estrutura para sobrepola
 	fwrite(&x,sizeof(struct Alunos),1,fp);
@@ -313,13 +334,13 @@ void verific(){
     if(teste != 0){
     system("cls");
     if((strcmp(usuario,"admin"))== 0)
-        printf("OL¡ RAFAEL\nSEGUE O MENU DE ADMINISTRADOR>>\n");
+        printf("OL√Å RAFAEL\nSEGUE O MENU DE ADMINISTRADOR>>\n");
     else
-    printf("Ol· Senhor(a) %s !\n%s\n%s\nDigite <ENTER> Para Prosseguir...",usuario,__DATE__,__TIME__);
+    printf("Ol√° Senhor(a) %s !\n%s\n%s\nDigite <ENTER> Para Prosseguir...",usuario,__DATE__,__TIME__);
     getchar();
 }
     else {
-        puts("Dados Incorretos!\n*********** Permiss„o Negada   ***********");
+        puts("Dados Incorretos!\n*********** Permiss√£o Negada   ***********");
         exit(3);
         }
 }
@@ -335,7 +356,7 @@ void newusuario(){
     int ver = 0;
         do{
             ver = 0;
-            printf("\nDigite seu nome de usu·rio>> ");
+            printf("\nDigite seu nome de usu√°rio>> ");
             scanf("%s",cadastro.nome);
             printf("\nDigite sua senha>> "); scanf("%s",cadastro.senha);
             printf("\nConfirme sua senha>> "); scanf("%s",passConf);
@@ -343,7 +364,7 @@ void newusuario(){
                 printf("Senhas conferidas!\n");
             }
             else{
-                puts("Senhas n„o s„o iguais!\n");
+                puts("Senhas n√£o s√£o iguais!\n");
                 ver = 1;
                 getchar();
                 system("cls");
